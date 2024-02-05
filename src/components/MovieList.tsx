@@ -1,33 +1,30 @@
-import "./MovieList.css";
-import MovieListItem from "./MovieListItem";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { IMovie } from "../ts/interfaces/global_interfaces";
+import MovieList from "./MovieList.container";
 
-const initMovies = [
-  {
-    id: 1,
-    title: "Killers if the Flower Moon",
-    director: "Marting Scorcese",
-    runtime: 3.26,
-    rating: 5,
-  },
-  {
-    id: 2,
-    title: "Asteroide City",
-    director: "Wes Anderson",
-    runtime: 1.45,
-    rating: 4,
-  },
-  {
-    id: 3,
-    title: "The Wale",
-    director: "Darren Aronofsjy",
-    runtime: 1.57,
-    rating: 5,
-  },
-];
+export default function MovieListContainer() {
+  const [movies, setMovies] = useState<IMovie[]>([]);
+  const [err, setErr] = useState<Error | null>(null);
 
-export default function MovieList() {
-  const [movies, setMovies] = useState(initMovies);
+  useEffect(() => {
+    const connect = async () => {
+      try {
+        const data = await fetch("/movies", options);
+        if (!data.ok) {
+          throw new Error("Sorry, we couldn't connect to our server!");
+        }
+        setMovies((await data.json()) as IMovie[]);
+      } catch (error) {
+        setErr(error as Error);
+      }
+    };
+    connect();
+  }, []);
+  const options = {
+    method: "GET",
+    header: { "Content-Type": "application/json" },
+  };
+
   const handleRating = (id: number, rating: number): void => {
     setMovies((prevMovie) => {
       return prevMovie.filter((movie) => {
@@ -36,17 +33,5 @@ export default function MovieList() {
       });
     });
   };
-  return (
-    <div className="container">
-      {movies.map((movie): JSX.Element => {
-        return (
-          <MovieListItem
-            key={movie.id}
-            movie={movie}
-            onRating={handleRating}
-          ></MovieListItem>
-        );
-      })}
-    </div>
-  );
+  return <MovieList movies={movies} err={err} handleRating={handleRating} />;
 }

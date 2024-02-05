@@ -1,4 +1,5 @@
 import { StarBorder, Star } from "@mui/icons-material";
+import { IMovie } from "../ts/interfaces/global_interfaces";
 
 export type Movie = {
   id: number;
@@ -9,7 +10,7 @@ export type Movie = {
 };
 
 interface Props {
-  item: Movie;
+  item: IMovie;
   onRating: (id: number, rating: number) => void;
 }
 
