@@ -1,5 +1,5 @@
 import { IMovie, MovieInput } from "../ts/interfaces/global_interfaces";
-import { useState, useEffect } from "react";
+import useFormEdit from "./useFormEdit";
 
 interface Props {
   onSave: (movie: MovieInput) => void;
@@ -7,27 +7,11 @@ interface Props {
 }
 
 export default function FormEdit({ onSave, editMovie }: Props): JSX.Element {
-  console.log(onSave, editMovie);
-  const [movie, setMovie] = useState<MovieInput>({
-    title: "",
-    director: "",
-    runtime: 0,
-  });
-  useEffect(() => {
-    if (editMovie) {
-      setMovie(editMovie);
-    }
-  }, [editMovie]);
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setMovie((prevMovie) => {
-      return { ...prevMovie, [name]: value };
-    });
-  };
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    onSave(movie);
-  };
+  const { movie, handleSubmit, handleChange } = useFormEdit(
+    onSave,
+    editMovie as MovieInput
+  );
+
   return (
     <form className="input-movie-form" onSubmit={handleSubmit}>
       <label htmlFor="title">
