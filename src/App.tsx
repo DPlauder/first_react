@@ -1,12 +1,7 @@
-import MovieList from "./components/MovieList";
+import "./App.css";
 
 function App() {
-  return (
-    <>
-      <h1>Movie List</h1>
-      <MovieList />
-    </>
-  );
+  return <></>;
 }
 
 export default App;

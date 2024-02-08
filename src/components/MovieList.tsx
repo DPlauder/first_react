@@ -1,52 +1,23 @@
-import "./MovieList.css";
+import style from "./css/MovieList.module.css";
 import MovieListItem from "./MovieListItem";
-import { useState } from "react";
+import useMovies from "./useMovies";
 
-const initMovies = [
-  {
-    id: 1,
-    title: "Killers if the Flower Moon",
-    director: "Marting Scorcese",
-    runtime: 3.26,
-    rating: 5,
-  },
-  {
-    id: 2,
-    title: "Asteroide City",
-    director: "Wes Anderson",
-    runtime: 1.45,
-    rating: 4,
-  },
-  {
-    id: 3,
-    title: "The Wale",
-    director: "Darren Aronofsjy",
-    runtime: 1.57,
-    rating: 5,
-  },
-];
+import { IMovie } from "../ts/interfaces/global_interfaces";
 
 export default function MovieList() {
-  const [movies, setMovies] = useState(initMovies);
-  const handleRating = (id: number, rating: number): void => {
-    setMovies((prevMovie) => {
-      return prevMovie.filter((movie) => {
-        if (movie.id === id) movie.rating = rating;
-        return movies;
-      });
-    });
-  };
-  return (
-    <div className="container">
-      {movies.map((movie): JSX.Element => {
-        return (
-          <MovieListItem
-            key={movie.id}
-            movie={movie}
-            onRating={handleRating}
-          ></MovieListItem>
-        );
-      })}
-    </div>
-  );
+  const [movies, err] = useMovies();
+  {
+    if (err !== null) {
+      return <div>{(err as Error).message}</div>;
+    } else {
+      return (
+        <div className={style.moviesContainer}>
+          {"."}
+          {(movies as IMovie[]).map((movie: IMovie): JSX.Element => {
+            return <MovieListItem key={movie.id} movie={movie} />;
+          })}
+        </div>
+      );
+    }
+  }
 }

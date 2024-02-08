@@ -1,19 +1,21 @@
+import style from "./css/MovieListItem.module.css";
+import { IMovie } from "../ts/interfaces/global_interfaces";
 import Rating from "./Rating";
-import { Movie } from "./Rating";
 
 interface Props {
-  movie: Movie;
-  onRating: (id: number, rating: number) => void;
+  movie: IMovie;
 }
 
-export default function MovieListItem({ movie, onRating }: Props) {
+export default function MovieListItem({ movie }: Props) {
+  const classNames = [style.movieCard];
+  if (movie.rating >= 5) classNames.push(style.fiveStar);
   return (
-    <div className="movie-card">
-      <h2>Title: {movie.title}</h2>
-      <h5>Director: {movie.director}</h5>
+    <div className={classNames.join(" ")}>
+      <h2 className={style.heading}>Title: {movie.title}</h2>
+      <h5 className={style.heading}>Director: {movie.director}</h5>
       <span>Runtime: {movie.runtime}</span>
       <div>
-        <Rating item={movie} onRating={onRating} />
+        <Rating item={movie}></Rating>
       </div>
     </div>
   );

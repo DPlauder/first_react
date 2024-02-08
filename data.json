@@ -1,0 +1,25 @@
+{
+  "movies": [
+    {
+      "id": 1,
+      "title": "Killers if the Flower Moon",
+      "director": "Marting Scorcese",
+      "runtime": 3.26,
+      "rating": 5
+    },
+    {
+      "id": 2,
+      "title": "Asteroide City",
+      "director": "Wes Anderson",
+      "runtime": 1.45,
+      "rating": 4
+    },
+    {
+      "id": 3,
+      "title": "The Wale",
+      "director": "Darren Aronofsjy",
+      "runtime": 1.57,
+      "rating": 5
+    }
+  ]
+}
