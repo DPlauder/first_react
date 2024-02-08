@@ -21,7 +21,7 @@ export default function Rating({ item, onRating }: Props) {
         style={{ display: "inline-block" }}
         key={i}
         className="rating-btn"
-        onClick={() => onRating(item.id, i + 1)}
+        onMouseOver={() => onRating(item.id, i + 1)}
       >
         {item.rating > i ? <Star /> : <StarBorder />}
       </div>
