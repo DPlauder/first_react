@@ -6,7 +6,7 @@ import { IMovie } from "../ts/interfaces/global_interfaces";
 import { useState } from "react";
 
 export default function MovieList() {
-  const [movies, err] = useMovies();
+  const [movies, err, handleDelete] = useMovies();
   const [filter, setFilter] = useState("");
   {
     if (err !== null) {
@@ -31,7 +31,13 @@ export default function MovieList() {
                 return movie.title.toLowerCase().includes(filter.toLowerCase());
               })
               .map((movie: IMovie): JSX.Element => {
-                return <MovieListItem key={movie.id} movie={movie} />;
+                return (
+                  <MovieListItem
+                    key={movie.id}
+                    movie={movie}
+                    onDelete={handleDelete as (movie: IMovie) => Promise<void>}
+                  />
+                );
               })}
           </Grid>
         </Container>

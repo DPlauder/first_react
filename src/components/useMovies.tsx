@@ -23,6 +23,17 @@ export default function useMovies() {
       }
     })();
   }, [setMovies]);
+  async function handleDelete(movie: IMovie) {
+    const options = {
+      method: "DELETE",
+    };
+    const res = await fetch(`/movies/${movie.id}`, options);
+    if (res.ok) {
+      setMovies((prevMovie) =>
+        prevMovie.filter((prevMovie) => prevMovie.id !== movie.id)
+      );
+    }
+  }
 
-  return [movies, err];
+  return [movies, err, handleDelete];
 }
