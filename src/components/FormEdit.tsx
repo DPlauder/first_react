@@ -4,10 +4,21 @@ import { useEffect } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import style from "./css/FormEdit.module.css";
+import movieShema from "./validationShema";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  TextField,
+} from "@mui/material";
 
 interface Props {
+  open: boolean;
   onSave: (movie: MovieInput) => void;
-  editMovie?: IMovie;
+  onClose: (isClosed: boolean) => void;
+  movie: {};
 }
 const movieShema = yup
   .object({
@@ -21,7 +32,12 @@ const movieShema = yup
   })
   .required();
 
-export default function FormEdit({ onSave, editMovie }: Props): JSX.Element {
+export default function FormEdit({
+  open,
+  onSave,
+  onClose,
+  movie = { title: "", director: "", runtime: 0 },
+}: Props): JSX.Element {
   const {
     register,
     handleSubmit,
