@@ -35,14 +35,32 @@ export default function useMovies() {
     }
   }
   async function handleAdd(movie: IMovie): Promise<void> {
+    let method = "Post";
+    let url = "/movies";
+    if (movie.id) {
+      method = "PUT";
+      url += `/${movie.id}`;
+    }
+
     const options = {
       method: "POST",
       body: JSON.stringify(movie),
       headers: { "Content-Type": "application/json" },
     };
-    const res = await fetch("/movies", options);
+    const res = await fetch(url, options);
     const data = await res.json();
-    setMovies((prevMovie) => [...prevMovie, data]);
+    if (movie.id) {
+      setMovies((prevMovies) =>
+        prevMovies?.map((prevMovie) => {
+          if (prevMovie.id === movie.id) {
+            return data;
+          }
+          return prevMovie;
+        })
+      );
+    } else {
+      setMovies((prevMovie) => [...prevMovie, data]);
+    }
   }
 
   return [movies, err, handleDelete, handleAdd];

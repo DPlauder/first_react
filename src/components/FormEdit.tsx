@@ -1,8 +1,7 @@
-import { IMovie, MovieInput } from "../ts/interfaces/global_interfaces";
+import { MovieInput } from "../ts/interfaces/global_interfaces";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import style from "./css/FormEdit.module.css";
 import movieShema from "./validationShema";
 import {
   Dialog,
@@ -17,7 +16,7 @@ interface Props {
   open: boolean;
   onSave: (movie: MovieInput) => void;
   onClose: (isClosed: boolean) => void;
-  movie: MovieInput;
+  movie?: MovieInput;
 }
 
 export default function FormEdit({
@@ -51,6 +50,7 @@ export default function FormEdit({
               {...register("title")}
               error={!!errors.title}
               label="Title"
+              sx={{ mb: "10px" }}
             />
             {errors.title && <div>{errors.title.message}</div>}
           </div>
@@ -59,6 +59,7 @@ export default function FormEdit({
               {...register("director")}
               error={!!errors.director}
               label="Director"
+              sx={{ mb: "10px" }}
             />
             {errors.director && <div>{errors.director.message}</div>}
           </div>
@@ -74,7 +75,7 @@ export default function FormEdit({
             <Button color="primary" type="submit">
               Save
             </Button>
-            <Button color="secondary" onClick={onClose}>
+            <Button color="secondary" onClick={() => onClose(false)}>
               Cancel
             </Button>
           </DialogActions>
