@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useId } from "react";
 import { IMovie } from "../ts/interfaces/global_interfaces";
 import MovieContext from "./MovieContext";
 
@@ -34,22 +34,28 @@ export default function useMovies() {
       );
     }
   }
-  async function handleAdd(movie: IMovie): Promise<void> {
+  async function handleAdd(
+    movie: IMovie,
+    isNew: boolean = false
+  ): Promise<void> {
     let method = "Post";
     let url = "/movies";
-    if (movie.id) {
+    console.log(movie);
+    if (!isNew) {
       method = "PUT";
       url += `/${movie.id}`;
     }
+    if (isNew) movie.id = Math.random() * 9999999;
 
     const options = {
-      method: "POST",
+      method,
       body: JSON.stringify(movie),
       headers: { "Content-Type": "application/json" },
     };
     const res = await fetch(url, options);
     const data = await res.json();
-    if (movie.id) {
+
+    if (!isNew) {
       setMovies((prevMovies) =>
         prevMovies?.map((prevMovie) => {
           if (prevMovie.id === movie.id) {

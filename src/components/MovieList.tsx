@@ -9,7 +9,7 @@ import FormEdit from "./FormEdit";
 import { MovieInput } from "../ts/interfaces/global_interfaces";
 
 export default function MovieList() {
-  const [movies, err, handleDelete, handleSubmit] = useMovies();
+  const [movies, err, handleDelete, handleAdd] = useMovies();
   const [filter, setFilter] = useState("");
   const [deleteDialog, setDeleteDialog] = useState<{
     open: boolean;
@@ -18,7 +18,9 @@ export default function MovieList() {
   const [formDialog, setFormDialog] = useState<{
     open: boolean;
     movie?: IMovie;
-  }>({ open: false });
+    isNew?: boolean;
+  }>({ open: false, isNew: true });
+
   const handleDialog = (open: boolean, movie: IMovie) => {
     if (open) {
       setDeleteDialog({ open: true, movie });
@@ -26,6 +28,7 @@ export default function MovieList() {
       setDeleteDialog({ open: false, movie: null });
     }
   };
+
   const handleEditDialog = (open: boolean, movie: IMovie) => {
     if (open) {
       setFormDialog({ open: true, movie });
@@ -58,9 +61,8 @@ export default function MovieList() {
               .map((movie: IMovie): JSX.Element => {
                 return (
                   <MovieListItem
-                    key={movie.id}
+                    key={movie.title}
                     movie={movie}
-                    //onDelete={handleDelete as (movie: IMovie) => Promise<void>}
                     onDialog={handleDialog}
                     onEdit={handleEditDialog}
                   />
@@ -82,8 +84,13 @@ export default function MovieList() {
           ></DeleteDialog>
           <FormEdit
             onSave={(movie: MovieInput) => {
-              setFormDialog({ open: false, movie: undefined });
-              (handleSubmit as (movie: MovieInput) => Promise<void>)(movie);
+              setFormDialog({ open: false, movie: undefined, isNew: false });
+              (
+                handleAdd as (
+                  movie: MovieInput,
+                  isNew: boolean
+                ) => Promise<void>
+              )(movie, formDialog.isNew!);
             }}
             open={formDialog.open}
             onClose={() => setFormDialog({ open: false, movie: undefined })}
@@ -91,7 +98,9 @@ export default function MovieList() {
           />
           <Fab
             color="primary"
-            onClick={() => setFormDialog({ open: true, movie: undefined })}
+            onClick={() => {
+              setFormDialog({ open: true, movie: undefined, isNew: true });
+            }}
             sx={{
               position: "fixed",
               right: "50%",
