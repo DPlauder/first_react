@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useId } from "react";
+import { useState, useEffect, useContext } from "react";
 import { IMovie } from "../ts/interfaces/global_interfaces";
 import MovieContext from "./MovieContext";
 
